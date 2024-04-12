@@ -67,9 +67,12 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = { }) {
+        Button(onClick = {
+            navController.navigate("navigationDrawer")
+        }) {
             Text(text = "Accedi")
         }
+
 
         TextButton(onClick = {
             navController.navigate("registerScreen")
