@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun ProfilePage(navController: NavController) {
+fun HomePage(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -20,6 +20,6 @@ fun ProfilePage(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Profile Page")
+        Text(text = "Home Page")
     }
 }
