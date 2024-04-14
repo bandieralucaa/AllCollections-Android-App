@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.allcollections.R
+import com.example.allcollections.menu.Routes
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -68,14 +69,14 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            navController.navigate("navigationDrawer")
+            navController.navigate(Routes.HOME_PAGE)
         }) {
             Text(text = "Accedi")
         }
 
 
         TextButton(onClick = {
-            navController.navigate("registerScreen")
+            navController.navigate(Routes.REGISTER_SCREEN)
         }) {
             Text(text = "Registrati")
         }
