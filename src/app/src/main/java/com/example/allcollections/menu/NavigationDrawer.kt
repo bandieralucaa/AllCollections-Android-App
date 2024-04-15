@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.allcollections.screens.HomeScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -94,14 +95,13 @@ fun NavigationDrawer(navController: NavController){
             }
         },
         content = {
-            Conten2 (
-                onMenuIconClick = {
-                    scope.launch {
-                        drawerState.open()
-                    }
+            HomeScreen(onMenuIconClick = {
+                scope.launch {
+                    drawerState.open()
                 }
-            )
+            })
         }
+
     )
 }
 
@@ -110,60 +110,3 @@ data class DrawerItem(
     val label: String
 )
 
-@Composable
-fun Content(
-    onClick: () -> Unit
-){
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = ">>> Swipe >>>")
-        Spacer(modifier = Modifier.height(20.dp))
-        Button(onClick = onClick) {
-            Text(text = "Click to open")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Conten2(
-    onMenuIconClick: () -> Unit
-) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = onMenuIconClick) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                },
-                title = {
-                    Text(text = "Menu")
-                }
-            )
-        }
-    ) {padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentPadding = PaddingValues(16.dp)
-        ){
-            items(50){
-                ListItem(
-                    headlineContent = { Text(text = "Item $it") },
-                    leadingContent = {
-                        Icon(
-                            Icons.Default.Face,
-                            contentDescription = null
-                        )
-                    }
-                )
-            }
-        }
-
-    }
-}

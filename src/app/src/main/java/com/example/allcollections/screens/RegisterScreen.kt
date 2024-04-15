@@ -1,7 +1,6 @@
 package com.example.allcollections.screens
 
 import android.app.DatePickerDialog
-import android.content.Context
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
 
 @Composable
 fun RegisterScreen(navController: NavController) {
