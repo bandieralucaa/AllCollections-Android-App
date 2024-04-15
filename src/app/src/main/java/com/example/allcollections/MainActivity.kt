@@ -7,12 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.allcollections.menu.NavigationDrawer
-import com.example.allcollections.menu.Routes
-import com.example.allcollections.screens.HomePage
 import com.example.allcollections.screens.LoginScreen
-import com.example.allcollections.screens.ProfilePage
 import com.example.allcollections.screens.RegisterScreen
-import com.example.allcollections.screens.SettingsPage
 
 
 class MainActivity : ComponentActivity() {
@@ -20,18 +16,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
-            NavHost(navController, startDestination = Routes.LOGIN_SCREEN) {
-                composable(Routes.LOGIN_SCREEN) { LoginScreen(navController) }
-                composable(Routes.REGISTER_SCREEN) { RegisterScreen(navController) }
-                composable(Routes.HOME_PAGE) { HomePage(navController) }
-                composable(Routes.SETTINGS_PAGE) { SettingsPage(navController) }
-                composable(Routes.PROFILE_PAGE) { ProfilePage(navController) }
+            NavHost(navController, startDestination = "loginScreen") {
+                composable("loginScreen") { LoginScreen(navController) }
+                composable("registerScreen") { RegisterScreen(navController) }
+                composable("navigationDrawer") { NavigationDrawer(navController)}
             }
-            NavigationDrawer(navController)
         }
     }
 }
-
-
-
-
