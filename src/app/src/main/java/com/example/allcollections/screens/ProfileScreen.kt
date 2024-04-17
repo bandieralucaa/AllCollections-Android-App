@@ -17,7 +17,7 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavController, drawerState: DrawerState, onMenuIconClick: () -> Unit) {
+fun ProfileScreen(navController: NavController, drawerState: DrawerState, onMenuIconClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -27,7 +27,7 @@ fun SettingsScreen(navController: NavController, drawerState: DrawerState, onMen
                     }
                 },
                 title = {
-                    Text(text = "Impostazioni")
+                    Text(text = "Profilo")
                 }
             )
         }
@@ -35,7 +35,7 @@ fun SettingsScreen(navController: NavController, drawerState: DrawerState, onMen
         Box(
             modifier = Modifier.padding(padding)
         ) {
-            Text(text = "Contenuto della schermata delle impostazioni")
+            Text(text = "Contenuto della schermata del profilo")
         }
     }
 }

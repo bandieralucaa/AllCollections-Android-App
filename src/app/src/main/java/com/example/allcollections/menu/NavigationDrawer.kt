@@ -7,7 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -15,7 +15,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,8 +30,7 @@ import com.example.allcollections.screens.HomeScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun NavigationDrawer(navController: NavController) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun NavigationDrawer(navController: NavController, drawerState: DrawerState) {
     val scope = rememberCoroutineScope()
 
     val items = listOf(
@@ -42,6 +40,10 @@ fun NavigationDrawer(navController: NavController) {
         },
         DrawerItem(icon = Icons.Default.Settings, label = "Impostazioni") {
             navController.navigate(Routes.SETTINGS_SCREEN)
+            scope.launch { drawerState.close() }
+        },
+        DrawerItem(icon = Icons.Default.Person, label = "Profilo") {
+            navController.navigate(Routes.PROFILE_SCREEN)
             scope.launch { drawerState.close() }
         }
     )
@@ -80,7 +82,6 @@ fun NavigationDrawer(navController: NavController) {
             }
         },
         content = {
-            // Nel contenuto principale, viene passato solo il menuIconClick per aprire il drawer
             HomeScreen(onMenuIconClick = {
                 scope.launch {
                     drawerState.open()
@@ -89,6 +90,7 @@ fun NavigationDrawer(navController: NavController) {
         }
     )
 }
+
 data class DrawerItem(
     val icon: ImageVector,
     val label: String,

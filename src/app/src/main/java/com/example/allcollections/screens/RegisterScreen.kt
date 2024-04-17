@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.allcollections.menu.Routes
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -77,7 +78,9 @@ fun RegisterScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = { /* Implementa la logica di registrazione */ }) {
+        Button(onClick = {
+            navController.navigate(Routes.LOGIN_SCREEN)
+        }) {
             Text(text = "Registrati")
         }
     }
@@ -91,8 +94,8 @@ fun ShowDatePicker(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit)
     val context = LocalContext.current
 
     OutlinedTextField(
-        value = formatDate(selectedDate), // Formatta la data
-        onValueChange = { /* Non fare nulla per evitare la modifica manuale del campo */ },
+        value = formatDate(selectedDate),
+        onValueChange = { },
         label = { Text(text = "Data di nascita") },
         trailingIcon = {
             IconButton(onClick = { isDatePickerVisible = true }) {

@@ -1,5 +1,3 @@
-// MainActivity.kt
-
 package com.example.allcollections
 
 import android.os.Bundle
@@ -21,6 +19,11 @@ import com.example.allcollections.screens.RegisterScreen
 import com.example.allcollections.screens.SettingsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
+import com.example.allcollections.screens.ProfileScreen
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,22 +31,31 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val coroutineScope = rememberCoroutineScope()
-            MainContent(navController, coroutineScope)
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            MainContent(navController, coroutineScope, drawerState)
         }
     }
 }
 
+
 @Composable
-fun MainContent(navController: NavHostController, coroutineScope: CoroutineScope) {
+fun MainContent(navController: NavHostController, coroutineScope: CoroutineScope, drawerState: DrawerState) {
     Surface(modifier = Modifier.fillMaxSize()) {
         NavHost(navController, startDestination = Routes.LOGIN_SCREEN) {
             composable(Routes.LOGIN_SCREEN) { LoginScreen(navController) }
             composable(Routes.REGISTER_SCREEN) { RegisterScreen(navController) }
-            composable(Routes.HOME_SCREEN) { NavigationDrawer(navController) }
+            composable(Routes.HOME_SCREEN) { NavigationDrawer(navController, drawerState) }
             composable(Routes.SETTINGS_SCREEN) {
-                SettingsScreen(navController) {
-                    coroutineScope.launch { // Apri il menu laterale
-                        navController.navigate(Routes.HOME_SCREEN)
+                SettingsScreen(navController = navController, drawerState = drawerState) {
+                    coroutineScope.launch {
+                        navController.navigateUp()
+                    }
+                }
+            }
+            composable(Routes.PROFILE_SCREEN) {
+                ProfileScreen(navController = navController, drawerState = drawerState) {
+                    coroutineScope.launch {
+                        navController.navigateUp()
                     }
                 }
             }
