@@ -23,8 +23,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.allcollections.R
-import com.example.allcollections.menu.Routes
+import com.example.allcollections.navigation.Screens
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -69,16 +70,19 @@ fun LoginScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            navController.navigate(Routes.HOME_SCREEN)
+            navController.navigate(Screens.HomeScreen.name) {
+                popUpTo(Screens.LoginScreen.name) {
+                    inclusive = true
+                }
+            }
         }) {
             Text(text = "Accedi")
         }
 
-
         TextButton(onClick = {
-            navController.navigate(Routes.REGISTER_SCREEN)
+            navController.navigate(Screens.RegisterScreen.name)
         }) {
-            Text(text = "Registrati")
+            Text("Non hai un account? Registrati")
         }
     }
 }

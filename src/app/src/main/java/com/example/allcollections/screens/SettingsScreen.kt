@@ -1,41 +1,25 @@
 package com.example.allcollections.screens
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen(navController: NavController, drawerState: DrawerState, onMenuIconClick: () -> Unit) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    IconButton(onClick = onMenuIconClick) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                },
-                title = {
-                    Text(text = "")
-                }
-            )
-        }
-    ) { padding ->
-        Box(
-            modifier = Modifier.padding(padding)
-        ) {
-            Text(text = "Contenuto della schermata delle impostazioni")
-        }
+fun SettingsScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Settings screen",
+            fontFamily = FontFamily.Serif,
+            fontSize = 22.sp
+        )
     }
 }

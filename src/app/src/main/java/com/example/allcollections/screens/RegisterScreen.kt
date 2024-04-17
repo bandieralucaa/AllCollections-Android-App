@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.allcollections.menu.Routes
+import com.example.allcollections.navigation.Screens
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -79,9 +80,9 @@ fun RegisterScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            navController.navigate(Routes.LOGIN_SCREEN)
+            navController.navigate(Screens.LoginScreen.name)
         }) {
-            Text(text = "Registrati")
+            Text("Registrati")
         }
     }
 }
