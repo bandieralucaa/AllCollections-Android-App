@@ -30,7 +30,7 @@ import com.example.allcollections.screens.HomeScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun NavigationDrawer(navController: NavController, drawerState: DrawerState) {
+fun NavigationDrawer(navController: NavController, drawerState: DrawerState, content: @Composable ()->Unit) {
     val scope = rememberCoroutineScope()
 
     val items = listOf(
@@ -82,11 +82,7 @@ fun NavigationDrawer(navController: NavController, drawerState: DrawerState) {
             }
         },
         content = {
-            HomeScreen(onMenuIconClick = {
-                scope.launch {
-                    drawerState.open()
-                }
-            })
+            content()
         }
     )
 }
@@ -96,3 +92,4 @@ data class DrawerItem(
     val label: String,
     val onClick: () -> Unit
 )
+

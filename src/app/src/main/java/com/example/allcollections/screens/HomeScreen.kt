@@ -30,7 +30,7 @@ fun HomeScreen(onMenuIconClick: () -> Unit) {
                     }
                 },
                 title = {
-                    Text(text = "Menu")
+                    Text(text = "")
                 }
             )
         }

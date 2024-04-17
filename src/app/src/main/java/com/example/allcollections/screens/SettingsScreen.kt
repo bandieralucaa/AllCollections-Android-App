@@ -27,7 +27,7 @@ fun SettingsScreen(navController: NavController, drawerState: DrawerState, onMen
                     }
                 },
                 title = {
-                    Text(text = "Impostazioni")
+                    Text(text = "")
                 }
             )
         }
