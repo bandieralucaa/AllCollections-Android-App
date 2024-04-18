@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.allcollections.collection.AddCollection
 import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
@@ -81,10 +82,13 @@ fun AppNavigation() {
                 SearchPage()
             }
             composable(route = Screens.SettingsScreen.name) {
-                SettingsScreen()
+                SettingsScreen(navController)
             }
             composable(route = Screens.RegisterScreen.name) {
                 RegisterScreen(navController)
+            }
+            composable(route = Screens.AddCollection.name) {
+                AddCollection(navController)
             }
         }
     }

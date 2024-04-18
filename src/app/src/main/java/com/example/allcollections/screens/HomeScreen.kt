@@ -1,34 +1,46 @@
 package com.example.allcollections.screens
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen() {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2), // Due card per riga
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(8.dp) // Spazio tra le card
     ) {
         items(50) { index ->
-            ListItem(
-                leadingContent = {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .aspectRatio(1f) // Stessa dimensione delle card
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Icon(
                         imageVector = Icons.Default.Face,
-                        contentDescription = "Face Icon"
+                        contentDescription = "Face Icon",
+                        modifier = Modifier.size(48.dp) // Dimensione dell'icona
                     )
-                },
-                headlineContent = { Text(text = "Item $index") }
-            )
+                    Text(text = "Item $index")
+                }
+            }
         }
     }
 }

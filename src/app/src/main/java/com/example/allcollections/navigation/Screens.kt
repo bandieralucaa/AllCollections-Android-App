@@ -7,5 +7,6 @@ enum class Screens {
     ProfileScreen,
     RegisterScreen,
     ChatScreen,
-    SearchPage
+    SearchPage,
+    AddCollection
 }
