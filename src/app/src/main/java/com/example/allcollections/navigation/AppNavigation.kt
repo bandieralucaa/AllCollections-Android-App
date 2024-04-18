@@ -1,14 +1,15 @@
 package com.example.allcollections.navigation
 
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
@@ -30,7 +31,9 @@ fun AppNavigation() {
     Scaffold(
         bottomBar = {
             if (currentDestination?.route !in listOf(Screens.LoginScreen.name, Screens.RegisterScreen.name)) {
-                NavigationBar {
+                NavigationBar(
+                    modifier = Modifier.height(55.dp)
+                ) {
                     listOfNavItems.forEach { navItem ->
                         NavigationBarItem(
                             selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
@@ -48,22 +51,18 @@ fun AppNavigation() {
                                     imageVector = navItem.icon,
                                     contentDescription = null
                                 )
-                            },
-                            label = {
-                                Text(text = navItem.label)
                             }
                         )
                     }
                 }
             }
         }
-    ) {paddingValues ->
+    ) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screens.LoginScreen.name,
-            modifier = Modifier
-                .padding(paddingValues)
-        ){
+            modifier = Modifier.padding(paddingValues)
+        ) {
             composable(route = Screens.LoginScreen.name) {
                 LoginScreen(navController)
             }
@@ -81,4 +80,5 @@ fun AppNavigation() {
             }
         }
     }
+
 }
