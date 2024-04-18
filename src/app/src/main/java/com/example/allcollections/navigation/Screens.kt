@@ -5,5 +5,7 @@ enum class Screens {
     HomeScreen,
     SettingsScreen,
     ProfileScreen,
-    RegisterScreen
+    RegisterScreen,
+    ChatScreen,
+    SearchPage
 }

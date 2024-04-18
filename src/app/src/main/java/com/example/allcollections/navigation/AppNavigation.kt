@@ -16,10 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
+import com.example.allcollections.screens.SearchPage
 import com.example.allcollections.screens.SettingsScreen
 
 @Composable
@@ -70,7 +72,13 @@ fun AppNavigation() {
                 HomeScreen()
             }
             composable(route = Screens.ProfileScreen.name) {
-                ProfileScreen()
+                ProfileScreen(navController)
+            }
+            composable(route = Screens.ChatScreen.name) {
+                ChatScreen()
+            }
+            composable(route = Screens.SearchPage.name) {
+                SearchPage()
             }
             composable(route = Screens.SettingsScreen.name) {
                 SettingsScreen()
