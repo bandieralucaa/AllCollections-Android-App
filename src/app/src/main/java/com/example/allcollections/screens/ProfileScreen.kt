@@ -70,7 +70,7 @@ fun ProfileScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            /*TODO*/
+            navController.navigate(Screens.MyCollections.name)
         }) {
             Text(text = "Vedi le tue collezioni")
         }

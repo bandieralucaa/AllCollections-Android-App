@@ -17,6 +17,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.allcollections.collection.AddCollection
+import com.example.allcollections.collection.MyCollections
+import com.example.allcollections.collection.ObjectCollection
 import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
@@ -89,6 +91,12 @@ fun AppNavigation() {
             }
             composable(route = Screens.AddCollection.name) {
                 AddCollection(navController)
+            }
+            composable(route = Screens.MyCollections.name) {
+                MyCollections(navController)
+            }
+            composable(route = Screens.ObjectCollection.name) {
+                ObjectCollection(navController)
             }
         }
     }

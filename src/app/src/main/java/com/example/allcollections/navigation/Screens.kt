@@ -8,5 +8,7 @@ enum class Screens {
     RegisterScreen,
     ChatScreen,
     SearchPage,
-    AddCollection
+    AddCollection,
+    MyCollections,
+    ObjectCollection
 }
