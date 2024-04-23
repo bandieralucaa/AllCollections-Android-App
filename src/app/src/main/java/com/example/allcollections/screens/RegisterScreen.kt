@@ -80,7 +80,7 @@ fun RegisterScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            navController.navigate(Screens.LoginScreen.name)
+            navController.navigate(Screens.CameraScreen.name)
         }) {
             Text("Registrati")
         }

@@ -10,5 +10,6 @@ enum class Screens {
     SearchPage,
     AddCollection,
     MyCollections,
-    ObjectCollection
+    ObjectCollection,
+    CameraScreen
 }

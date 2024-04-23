@@ -14,11 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-
+import com.example.allcollections.navigation.Screens
 
 @Composable
 fun SettingsScreen(navController: NavController) {
-    val settingsItems = listOf("Cambia nome", "Cambia password", "Notifiche", "Privacy", "Aiuto")
+    val settingsItems = listOf<Pair<String, () -> Unit>>(
+        "Cambia nome" to { /* Azione per cambiare il nome */ },
+        "Cambia password" to { /* Azione per cambiare la password */ },
+        "Notifiche" to { /* Azione per le notifiche */ },
+        "Privacy" to { /* Azione per la privacy */ },
+        "Aiuto" to { /* Azione per l'aiuto */ },
+        "Logout" to { navController.navigate(Screens.LoginScreen.name) }
+    )
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -34,22 +41,23 @@ fun SettingsScreen(navController: NavController) {
             modifier = Modifier.weight(1f)
         ) {
             items(settingsItems.size) { index ->
-                val setting = settingsItems[index]
-                ClickableSettingItem(setting = setting)
+                val (setting, action) = settingsItems[index]
+                ClickableSettingItem(setting = setting, onClick = action)
                 if (index < settingsItems.size - 1) {
                     Divider(color = Color.Gray, thickness = 0.5.dp)
                 }
             }
         }
+
     }
 }
 
 @Composable
-fun ClickableSettingItem(setting: String) {
+fun ClickableSettingItem(setting: String, onClick: () -> Unit) {
     Text(
         text = setting,
         modifier = Modifier
-            .clickable { /* Azione da eseguire quando l'elemento viene cliccato */ }
+            .clickable(onClick = onClick) // Imposta l'azione al clic
             .padding(vertical = 16.dp, horizontal = 16.dp)
             .fillMaxWidth()
     )

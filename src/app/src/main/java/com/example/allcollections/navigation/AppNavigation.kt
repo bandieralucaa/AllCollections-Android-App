@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.allcollections.collection.AddCollection
 import com.example.allcollections.collection.MyCollections
 import com.example.allcollections.collection.ObjectCollection
+import com.example.allcollections.screens.CameraScreen
 import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
@@ -97,6 +98,9 @@ fun AppNavigation() {
             }
             composable(route = Screens.ObjectCollection.name) {
                 ObjectCollection(navController)
+            }
+            composable(route = Screens.CameraScreen.name) {
+                CameraScreen(navController)
             }
         }
     }
