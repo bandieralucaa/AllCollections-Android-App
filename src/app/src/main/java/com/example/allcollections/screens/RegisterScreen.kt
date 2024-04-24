@@ -1,6 +1,5 @@
 package com.example.allcollections.screens
 
-import android.app.DatePickerDialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,13 +18,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.allcollections.navigation.Screens
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -35,6 +36,13 @@ fun RegisterScreen(navController: NavController) {
     var dateOfBirth by remember { mutableStateOf(LocalDate.now()) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    val auth = Firebase.auth
+    val db = Firebase.firestore
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -57,6 +65,14 @@ fun RegisterScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
+        OutlinedTextField(
+            value = gender,
+            onValueChange = { gender = it },
+            label = { Text(text = "Sesso") }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
         ShowDatePicker(dateOfBirth) { selectedDate ->
             dateOfBirth = selectedDate
         }
@@ -67,6 +83,14 @@ fun RegisterScreen(navController: NavController) {
             value = email,
             onValueChange = { email = it },
             label = { Text(text = "Indirizzo email") }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text(text = "Username") }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -80,18 +104,53 @@ fun RegisterScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            navController.navigate(Screens.CameraScreen.name)
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val currentUser = auth.currentUser
+                        if (currentUser != null) {
+                            val user = hashMapOf(
+                                "name" to name,
+                                "surname" to surname,
+                                "dateOfBirth" to dateOfBirth.toString(),
+                                "email" to email,
+                                "password" to password,
+                                "gender" to gender,
+                                "username" to username
+                            )
+
+                            db.collection("users")
+                                .document(currentUser.uid)
+                                .set(user)
+                                .addOnSuccessListener {
+                                    // Naviga alla schermata successiva dopo la registrazione
+                                    navController.navigate(Screens.CameraScreen.name)
+                                }
+                                .addOnFailureListener { e ->
+                                    errorMessage = "Errore durante la registrazione: ${e.message}"
+                                }
+                        }
+                    } else {
+                        errorMessage = "Errore durante la registrazione: ${task.exception?.message}"
+                    }
+                }
         }) {
             Text("Registrati")
         }
+
+        errorMessage?.let { message ->
+            Text(
+                text = message,
+                color = Color.Red
+            )
+        }
+
     }
 }
-
 
 @Composable
 fun ShowDatePicker(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit) {
     var isDatePickerVisible by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
 
     OutlinedTextField(
@@ -107,7 +166,7 @@ fun ShowDatePicker(selectedDate: LocalDate, onDateSelected: (LocalDate) -> Unit)
     )
 
     if (isDatePickerVisible) {
-        val datePickerDialog = remember { DatePickerDialog(context) }
+        val datePickerDialog = remember { android.app.DatePickerDialog(context) }
 
         datePickerDialog.datePicker.calendarViewShown = false
         datePickerDialog.datePicker.spinnersShown = true
@@ -126,4 +185,3 @@ private fun formatDate(date: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     return date.format(formatter)
 }
-

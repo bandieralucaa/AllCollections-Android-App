@@ -1,12 +1,7 @@
 package com.example.allcollections.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,19 +18,54 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.example.allcollections.R
 import com.example.allcollections.navigation.Screens
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import android.util.Log
+import androidx.compose.material3.MaterialTheme
 
 @Composable
 fun LoginScreen(navController: NavController) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val auth = Firebase.auth
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    var email by remember {
-        mutableStateOf("")
-    }
+    fun signInWithEmailAndPassword(email: String, password: String) {
+        if (email.isBlank() || password.isBlank()) {
+            errorMessage = "Inserire email e/o password"
+            return
+        }
 
-    var password by remember {
-        mutableStateOf("")
+        Log.d("Login", "Email: $email, Password: $password") // Aggiunta istruzione di log qui
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    navController.navigate(Screens.HomeScreen.name) {
+                        popUpTo(Screens.LoginScreen.name) {
+                            inclusive = true
+                        }
+                    }
+                } else {
+                    val exception = task.exception
+                    exception?.let {
+                        Log.e("Login", "Exception during login", it) // Aggiunta istruzione di log qui
+                        when (it) {
+                            is FirebaseAuthInvalidUserException,
+                            is FirebaseAuthInvalidCredentialsException -> {
+                                errorMessage = "Email e/o password errata"
+                            }
+                            else -> {
+                                errorMessage = "Errore durante il login"
+                            }
+                        }
+                    }
+                }
+            }
     }
 
 
@@ -44,8 +74,11 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(painter = painterResource(id = R.drawable.logo), contentDescription = "Logo",
-            modifier = Modifier.size(150.dp))
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Logo",
+            modifier = Modifier.size(150.dp)
+        )
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -53,36 +86,36 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        OutlinedTextField(value = email, onValueChange = {
-            email = it
-        }, label = {
-            Text(text = "Indirizzo email")
-        })
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text(text = "Indirizzo email") }
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        OutlinedTextField(value = password, onValueChange = {
-            password = it
-        }, label = {
-            Text(text = "Password")
-        }, visualTransformation = PasswordVisualTransformation())
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text(text = "Password") },
+            visualTransformation = PasswordVisualTransformation()
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {
-            navController.navigate(Screens.HomeScreen.name) {
-                popUpTo(Screens.LoginScreen.name) {
-                    inclusive = true
-                }
-            }
-        }) {
+        Button(onClick = { signInWithEmailAndPassword(email, password) }) {
             Text(text = "Accedi")
         }
 
-        TextButton(onClick = {
-            navController.navigate(Screens.RegisterScreen.name)
-        }) {
+        TextButton(onClick = { navController.navigate(Screens.RegisterScreen.name) }) {
             Text("Non hai un account? Registrati")
+        }
+
+        errorMessage?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error
+            )
         }
     }
 }

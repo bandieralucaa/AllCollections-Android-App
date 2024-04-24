@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "172855228563",
+    "project_id": "allcollections-a8030",
+    "storage_bucket": "allcollections-a8030.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172855228563:android:f462d354016b2d74eef566",
+        "android_client_info": {
+          "package_name": "com.example.allcollections"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0Ms2O_0HBB7l4Xk9fmY-xJQVXw0TzUWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
