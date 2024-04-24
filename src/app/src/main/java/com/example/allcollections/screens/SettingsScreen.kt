@@ -19,22 +19,31 @@ import com.example.allcollections.navigation.Screens
 @Composable
 fun SettingsScreen(navController: NavController) {
     val settingsItems = listOf<Pair<String, () -> Unit>>(
-        "Cambia nome" to { /* Azione per cambiare il nome */ },
-        "Cambia password" to { /* Azione per cambiare la password */ },
-        "Notifiche" to { /* Azione per le notifiche */ },
-        "Privacy" to { /* Azione per la privacy */ },
-        "Aiuto" to { /* Azione per l'aiuto */ },
+        "Cambia nome" to { /* TODO */ },
+        "Cambia password" to { /* TODO */ },
+        "Notifiche" to { /* TODO */ },
+        "Cambia tema" to { /* TODO */ },
+         "Privacy" to { /* TODO */ },
         "Logout" to { navController.navigate(Screens.LoginScreen.name) }
     )
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        IconButton(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier.padding(16.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 10.dp),
+            horizontalArrangement = Arrangement.Start
         ) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+            IconButton(
+                onClick = { navController.popBackStack() }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back"
+                )
+            }
         }
 
         LazyColumn(
@@ -57,7 +66,7 @@ fun ClickableSettingItem(setting: String, onClick: () -> Unit) {
     Text(
         text = setting,
         modifier = Modifier
-            .clickable(onClick = onClick) // Imposta l'azione al clic
+            .clickable(onClick = onClick)
             .padding(vertical = 16.dp, horizontal = 16.dp)
             .fillMaxWidth()
     )

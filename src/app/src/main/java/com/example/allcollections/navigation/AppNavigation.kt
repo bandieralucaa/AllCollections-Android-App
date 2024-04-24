@@ -1,5 +1,6 @@
 package com.example.allcollections.navigation
 
+import SearchScreen
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -25,7 +26,6 @@ import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
-import com.example.allcollections.screens.SearchPage
 import com.example.allcollections.screens.SettingsScreen
 
 @Composable
@@ -36,7 +36,7 @@ fun AppNavigation() {
 
     Scaffold(
         bottomBar = {
-            if (currentDestination?.route !in listOf(Screens.LoginScreen.name, Screens.RegisterScreen.name)) {
+            if (currentDestination?.route !in listOf(Screens.LoginScreen.name, Screens.RegisterScreen.name, Screens.CameraScreen.name)) {
                 NavigationBar(
                     modifier = Modifier.height(55.dp)
                 ) {
@@ -82,7 +82,7 @@ fun AppNavigation() {
                 ChatScreen()
             }
             composable(route = Screens.SearchPage.name) {
-                SearchPage()
+                SearchScreen()
             }
             composable(route = Screens.SettingsScreen.name) {
                 SettingsScreen(navController)
