@@ -11,8 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -27,10 +29,11 @@ import com.example.allcollections.screens.LoginScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
 import com.example.allcollections.screens.SettingsScreen
+import com.example.allcollections.viewModel.ProfileViewModel
+
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
+fun AppNavigation(navController: NavHostController, viewModel: ProfileViewModel, startDestination: String) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -66,11 +69,11 @@ fun AppNavigation() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screens.LoginScreen.name,
+            startDestination = startDestination,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.LoginScreen.name) {
-                LoginScreen(navController)
+                LoginScreen(navController, viewModel)
             }
             composable(route = Screens.HomeScreen.name) {
                 HomeScreen()
@@ -85,7 +88,7 @@ fun AppNavigation() {
                 SearchScreen()
             }
             composable(route = Screens.SettingsScreen.name) {
-                SettingsScreen(navController)
+                SettingsScreen(navController, viewModel)
             }
             composable(route = Screens.RegisterScreen.name) {
                 RegisterScreen(navController)

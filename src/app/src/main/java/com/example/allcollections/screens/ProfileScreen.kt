@@ -16,6 +16,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,12 +29,24 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.allcollections.R
 import com.example.allcollections.navigation.Screens
+import com.example.allcollections.viewModel.ProfileViewModel
 
 @Composable
 fun ProfileScreen(navController: NavController) {
+
+    val viewModel: ProfileViewModel = viewModel()
+
+    var username by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(key1 = Unit) {
+        username = viewModel.getUsername()
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -62,9 +80,9 @@ fun ProfileScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Il tuo nome utente",
+            text = "$username",
             fontFamily = FontFamily.Serif,
-            fontSize = 18.sp
+            fontSize = 20.sp
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -84,3 +102,4 @@ fun ProfileScreen(navController: NavController) {
         }
     }
 }
+

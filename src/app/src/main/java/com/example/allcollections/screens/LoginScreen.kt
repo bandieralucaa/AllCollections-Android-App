@@ -26,48 +26,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import android.util.Log
 import androidx.compose.material3.MaterialTheme
+import com.example.allcollections.viewModel.ProfileViewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, viewModel: ProfileViewModel) {
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val auth = Firebase.auth
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    fun signInWithEmailAndPassword(email: String, password: String) {
-        if (email.isBlank() || password.isBlank()) {
-            errorMessage = "Inserire email e/o password"
-            return
-        }
-
-        Log.d("Login", "Email: $email, Password: $password") // Aggiunta istruzione di log qui
-
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    navController.navigate(Screens.HomeScreen.name) {
-                        popUpTo(Screens.LoginScreen.name) {
-                            inclusive = true
-                        }
-                    }
-                } else {
-                    val exception = task.exception
-                    exception?.let {
-                        Log.e("Login", "Exception during login", it) // Aggiunta istruzione di log qui
-                        when (it) {
-                            is FirebaseAuthInvalidUserException,
-                            is FirebaseAuthInvalidCredentialsException -> {
-                                errorMessage = "Email e/o password errata"
-                            }
-                            else -> {
-                                errorMessage = "Errore durante il login"
-                            }
-                        }
-                    }
-                }
-            }
-    }
-
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -103,7 +69,19 @@ fun LoginScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = { signInWithEmailAndPassword(email, password) }) {
+        Button(onClick = {
+            viewModel.login(email, password) { success, error ->
+                if (success) {
+                    navController.navigate(Screens.HomeScreen.name) {
+                        popUpTo(Screens.LoginScreen.name) {
+                            inclusive = true
+                        }
+                    }
+                } else {
+                    errorMessage = error ?: "Errore durante il login"
+                }
+            }
+        }) {
             Text(text = "Accedi")
         }
 

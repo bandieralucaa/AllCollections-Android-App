@@ -1,11 +1,13 @@
 package com.example.allcollections.collection
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,13 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.allcollections.navigation.Screens
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun AddCollection(navController: NavController) {
 
     var name by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
-
+    var description by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val iduser = Firebase.auth.currentUser?.uid
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -64,11 +71,50 @@ fun AddCollection(navController: NavController) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
+        OutlinedTextField(
+            value = description,
+            onValueChange = { description = it },
+            label = { Text(text = "Descrzione") }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         Button(onClick = {
-            navController.navigate(Screens.ProfileScreen.name)
+            if (iduser != null) {
+                val db = Firebase.firestore
+
+                val collectionData = hashMapOf(
+                    "name" to name,
+                    "category" to category,
+                    "description" to description,
+                    "iduser" to iduser
+                )
+
+                db.collection("collections")
+                    .add(collectionData)
+                    .addOnSuccessListener { documentReference ->
+                        // Il salvataggio è avvenuto con successo
+                        Log.d("Firestore", "Collezione salvata con successo: ${documentReference.id}")
+                        navController.navigate(Screens.ProfileScreen.name)
+                    }
+                    .addOnFailureListener { e ->
+                        // Si è verificato un errore durante il salvataggio
+                        Log.e("Firestore", "Errore durante il salvataggio della collezione", e)
+                        errorMessage = "Errore durante il salvataggio della collezione"
+                    }
+            } else {
+                errorMessage = "Utente non autenticato"
+            }
         }) {
-            Text(text = "Invio")
+            Text(text = "Salva collezione")
+        }
+
+
+        errorMessage?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error
+            )
         }
     }
 }
