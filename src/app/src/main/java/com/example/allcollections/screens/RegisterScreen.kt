@@ -22,8 +22,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.allcollections.navigation.Screens
+import com.example.allcollections.viewModel.ProfileViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.google.firebase.auth.ktx.auth
@@ -32,6 +34,9 @@ import com.google.firebase.ktx.Firebase
 
 @Composable
 fun RegisterScreen(navController: NavController) {
+    val profileViewModel: ProfileViewModel = viewModel()
+
+
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var dateOfBirth by remember { mutableStateOf(LocalDate.now()) }
@@ -40,9 +45,6 @@ fun RegisterScreen(navController: NavController) {
     var gender by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    val auth = Firebase.auth
-    val db = Firebase.firestore
 
 
     Column(
@@ -106,36 +108,21 @@ fun RegisterScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(onClick = {
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val currentUser = auth.currentUser
-                        if (currentUser != null) {
-                            val user = hashMapOf(
-                                "name" to name,
-                                "surname" to surname,
-                                "dateOfBirth" to dateOfBirth.toString(),
-                                "email" to email,
-                                "password" to password,
-                                "gender" to gender,
-                                "username" to username
-                            )
-
-                            db.collection("users")
-                                .document(currentUser.uid)
-                                .set(user)
-                                .addOnSuccessListener {
-                                    // Naviga alla schermata successiva dopo la registrazione
-                                    navController.navigate(Screens.CameraScreen.name)
-                                }
-                                .addOnFailureListener { e ->
-                                    errorMessage = "Errore durante la registrazione: ${e.message}"
-                                }
-                        }
-                    } else {
-                        errorMessage = "Errore durante la registrazione: ${task.exception?.message}"
-                    }
+            profileViewModel.registerUser(
+                name = name,
+                surname = surname,
+                dateOfBirth = dateOfBirth,
+                email = email,
+                password = password,
+                gender = gender,
+                username = username
+            ) { success, error ->
+                if (success) {
+                    navController.navigate(Screens.CameraScreen.name)
+                } else {
+                    errorMessage = error
                 }
+            }
         }) {
             Text("Registrati")
         }
