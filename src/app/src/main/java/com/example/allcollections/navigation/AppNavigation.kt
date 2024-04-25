@@ -21,7 +21,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.allcollections.collection.AddCollection
 import com.example.allcollections.collection.MyCollections
-import com.example.allcollections.collection.ObjectCollection
 import com.example.allcollections.screens.CameraScreen
 import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.screens.HomeScreen
@@ -29,11 +28,13 @@ import com.example.allcollections.screens.LoginScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
 import com.example.allcollections.screens.SettingsScreen
+import com.example.allcollections.viewModel.CollectionViewModel
 import com.example.allcollections.viewModel.ProfileViewModel
+import com.example.allcollections.viewModel.ViewModelContainer
 
 
 @Composable
-fun AppNavigation(navController: NavHostController, viewModel: ProfileViewModel, startDestination: String) {
+fun AppNavigation(navController: NavHostController, viewModelContainer: ViewModelContainer, startDestination: String) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -73,7 +74,7 @@ fun AppNavigation(navController: NavHostController, viewModel: ProfileViewModel,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.LoginScreen.name) {
-                LoginScreen(navController, viewModel)
+                LoginScreen(navController, viewModelContainer.profileViewModel)
             }
             composable(route = Screens.HomeScreen.name) {
                 HomeScreen()
@@ -88,7 +89,7 @@ fun AppNavigation(navController: NavHostController, viewModel: ProfileViewModel,
                 SearchScreen()
             }
             composable(route = Screens.SettingsScreen.name) {
-                SettingsScreen(navController, viewModel)
+                SettingsScreen(navController, viewModelContainer.profileViewModel)
             }
             composable(route = Screens.RegisterScreen.name) {
                 RegisterScreen(navController)
@@ -97,10 +98,7 @@ fun AppNavigation(navController: NavHostController, viewModel: ProfileViewModel,
                 AddCollection(navController)
             }
             composable(route = Screens.MyCollections.name) {
-                MyCollections(navController)
-            }
-            composable(route = Screens.ObjectCollection.name) {
-                ObjectCollection(navController)
+                MyCollections(navController, viewModelContainer.collectionViewModel)
             }
             composable(route = Screens.CameraScreen.name) {
                 CameraScreen(navController)

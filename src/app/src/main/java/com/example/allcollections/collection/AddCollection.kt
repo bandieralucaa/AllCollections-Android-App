@@ -18,14 +18,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.allcollections.navigation.Screens
+import com.example.allcollections.viewModel.CollectionViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 @Composable
 fun AddCollection(navController: NavController) {
+
+    val viewModel: CollectionViewModel = viewModel()
 
     var name by remember { mutableStateOf("") }
     var category by remember { mutableStateOf("") }
@@ -80,34 +84,22 @@ fun AddCollection(navController: NavController) {
         Spacer(modifier = Modifier.height(10.dp))
 
         Button(onClick = {
-            if (iduser != null) {
-                val db = Firebase.firestore
-
-                val collectionData = hashMapOf(
-                    "name" to name,
-                    "category" to category,
-                    "description" to description,
-                    "iduser" to iduser
-                )
-
-                db.collection("collections")
-                    .add(collectionData)
-                    .addOnSuccessListener { documentReference ->
-                        // Il salvataggio è avvenuto con successo
-                        Log.d("Firestore", "Collezione salvata con successo: ${documentReference.id}")
-                        navController.navigate(Screens.ProfileScreen.name)
-                    }
-                    .addOnFailureListener { e ->
-                        // Si è verificato un errore durante il salvataggio
-                        Log.e("Firestore", "Errore durante il salvataggio della collezione", e)
-                        errorMessage = "Errore durante il salvataggio della collezione"
-                    }
-            } else {
-                errorMessage = "Utente non autenticato"
-            }
+            viewModel.saveCollection(
+                name = name,
+                category = category,
+                description = description,
+                iduser = iduser,
+                onSuccess = {
+                    navController.navigate(Screens.ProfileScreen.name)
+                },
+                onFailure = { message ->
+                    errorMessage = message
+                }
+            )
         }) {
             Text(text = "Salva collezione")
         }
+
 
 
         errorMessage?.let { message ->

@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import com.example.allcollections.navigation.AppNavigation
 import com.example.allcollections.navigation.Screens
+import com.example.allcollections.viewModel.CollectionViewModel
 import com.example.allcollections.viewModel.ProfileViewModel
+import com.example.allcollections.viewModel.ViewModelContainer
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.initialize
@@ -20,7 +22,10 @@ class MainActivity : ComponentActivity() {
         Firebase.initialize(this)
         setContent {
             val navController = rememberNavController()
-            val viewModel: ProfileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+            val profileViewModel: ProfileViewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+            val collectionViewModel: CollectionViewModel = ViewModelProvider(this).get(CollectionViewModel::class.java)
+            val viewModelContainer = ViewModelContainer(profileViewModel, collectionViewModel)
+
             val currentUser = FirebaseAuth.getInstance().currentUser
 
             val startDestination = if (currentUser != null) {
@@ -29,7 +34,8 @@ class MainActivity : ComponentActivity() {
                 Screens.LoginScreen.name
             }
 
-            AppNavigation(navController, viewModel, startDestination)
+
+            AppNavigation(navController, viewModelContainer, startDestination)
         }
     }
 }
