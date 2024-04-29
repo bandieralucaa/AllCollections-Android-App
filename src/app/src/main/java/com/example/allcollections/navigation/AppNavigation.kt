@@ -11,25 +11,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.example.allcollections.collection.AddCollection
 import com.example.allcollections.collection.MyCollections
-import com.example.allcollections.screens.CameraScreen
+import com.example.allcollections.collection.UserCollection
 import com.example.allcollections.screens.ChatScreen
+import com.example.allcollections.screens.CollectionDetailScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
 import com.example.allcollections.screens.SettingsScreen
-import com.example.allcollections.viewModel.CollectionViewModel
-import com.example.allcollections.viewModel.ProfileViewModel
 import com.example.allcollections.viewModel.ViewModelContainer
 
 
@@ -40,7 +37,7 @@ fun AppNavigation(navController: NavHostController, viewModelContainer: ViewMode
 
     Scaffold(
         bottomBar = {
-            if (currentDestination?.route !in listOf(Screens.LoginScreen.name, Screens.RegisterScreen.name, Screens.CameraScreen.name)) {
+            if (currentDestination?.route !in listOf(Screens.LoginScreen.name, Screens.RegisterScreen.name)) {
                 NavigationBar(
                     modifier = Modifier.height(55.dp)
                 ) {
@@ -100,9 +97,16 @@ fun AppNavigation(navController: NavHostController, viewModelContainer: ViewMode
             composable(route = Screens.MyCollections.name) {
                 MyCollections(navController, viewModelContainer.collectionViewModel)
             }
-            composable(route = Screens.CameraScreen.name) {
-                CameraScreen(navController)
+            composable(route = "${Screens.CollectionDetailScreen.name}/{iduser}/{name}/{category}/{description}") { backStackEntry ->
+                val iduser = backStackEntry.arguments?.getString("iduser") ?: ""
+                val name = backStackEntry.arguments?.getString("name") ?: ""
+                val category = backStackEntry.arguments?.getString("category") ?: ""
+                val description = backStackEntry.arguments?.getString("description") ?: ""
+                val userCollection = UserCollection(name, category, description, iduser)
+                CollectionDetailScreen(navController, userCollection)
             }
+
+
         }
     }
 

@@ -86,7 +86,8 @@ fun MyCollections(navController: NavController, viewModel: CollectionViewModel) 
                         .padding(8.dp)
                         .aspectRatio(1f) // Stessa dimensione delle card
                         .clickable {
-                            navController.navigate(Screens.ObjectCollection.name)
+                            val selectedCollection = collections.value[index]
+                            navController.navigate("${Screens.CollectionDetailScreen.name}/$iduser/${selectedCollection.name}/${selectedCollection.category}/${selectedCollection.description}")
                         }
                 ) {
                     Column(

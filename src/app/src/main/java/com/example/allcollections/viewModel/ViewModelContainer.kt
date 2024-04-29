@@ -1,6 +1,6 @@
-package com.example.allcollections.viewModel
+    package com.example.allcollections.viewModel
 
-data class ViewModelContainer(
-    val profileViewModel: ProfileViewModel,
-    val collectionViewModel: CollectionViewModel
-)
+    data class ViewModelContainer(
+        val profileViewModel: ProfileViewModel,
+        val collectionViewModel: CollectionViewModel
+    )

@@ -118,7 +118,7 @@ fun RegisterScreen(navController: NavController) {
                 username = username
             ) { success, error ->
                 if (success) {
-                    navController.navigate(Screens.CameraScreen.name)
+                    navController.navigate(Screens.HomeScreen.name)
                 } else {
                     errorMessage = error
                 }
