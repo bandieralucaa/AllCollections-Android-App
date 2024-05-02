@@ -24,6 +24,7 @@ import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.screens.CollectionDetailScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
+import com.example.allcollections.screens.PhotoProfileScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
 import com.example.allcollections.screens.SettingsScreen
@@ -105,7 +106,9 @@ fun AppNavigation(navController: NavHostController, viewModelContainer: ViewMode
                 val userCollection = UserCollection(name, category, description, iduser)
                 CollectionDetailScreen(navController, userCollection)
             }
-
+            composable(route = Screens.PhotoProfileScreen.name) {
+                PhotoProfileScreen()
+            }
 
         }
     }

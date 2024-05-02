@@ -11,4 +11,5 @@ enum class Screens {
     AddCollection,
     MyCollections,
     CollectionDetailScreen,
+    PhotoProfileScreen
 }
