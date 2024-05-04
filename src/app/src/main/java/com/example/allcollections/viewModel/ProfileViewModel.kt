@@ -26,8 +26,9 @@ class ProfileViewModel : ViewModel() {
     suspend fun getUsername(): String {
         val userId = auth.currentUser?.uid ?: throw Exception("User not logged in")
         val userDocument = db.collection("users").document(userId).get().await()
-        return userDocument.getString("username") ?: throw Exception("Username not found")
+        return userDocument.getString("username") ?: ""
     }
+
 
     fun registerUser(
         name: String,

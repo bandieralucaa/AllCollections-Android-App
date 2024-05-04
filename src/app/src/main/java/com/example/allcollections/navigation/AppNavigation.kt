@@ -21,7 +21,8 @@ import com.example.allcollections.collection.AddCollection
 import com.example.allcollections.collection.MyCollections
 import com.example.allcollections.collection.UserCollection
 import com.example.allcollections.screens.ChatScreen
-import com.example.allcollections.screens.CollectionDetailScreen
+import com.example.allcollections.collection.CollectionDetailScreen
+import com.example.allcollections.collection.ObjectCollection
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
 import com.example.allcollections.screens.PhotoProfileScreen
@@ -109,7 +110,9 @@ fun AppNavigation(navController: NavHostController, viewModelContainer: ViewMode
             composable(route = Screens.PhotoProfileScreen.name) {
                 PhotoProfileScreen()
             }
-
+            composable(route = Screens.ObjectCollection.name) {
+                ObjectCollection(navController)
+            }
         }
     }
 
