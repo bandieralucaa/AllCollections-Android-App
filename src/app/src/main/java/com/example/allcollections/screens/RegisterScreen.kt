@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.allcollections.navigation.Screens
 import com.example.allcollections.viewModel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import com.google.firebase.auth.ktx.auth
@@ -35,7 +36,6 @@ import com.google.firebase.ktx.Firebase
 @Composable
 fun RegisterScreen(navController: NavController) {
     val profileViewModel: ProfileViewModel = viewModel()
-
 
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
@@ -118,13 +118,14 @@ fun RegisterScreen(navController: NavController) {
                 username = username
             ) { success, error ->
                 if (success) {
-                    navController.navigate(Screens.HomeScreen.name)
+                    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                    navController.navigate("${Screens.PhotoProfileScreen.name}/$userId")
                 } else {
                     errorMessage = error
                 }
             }
         }) {
-            Text("Registrati")
+            Text("Prosegui")
         }
 
         errorMessage?.let { message ->

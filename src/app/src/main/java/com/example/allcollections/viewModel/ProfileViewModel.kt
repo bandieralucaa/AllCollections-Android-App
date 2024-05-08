@@ -1,5 +1,6 @@
 package com.example.allcollections.viewModel
 
+import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import java.time.LocalDate
 
@@ -105,4 +107,39 @@ class ProfileViewModel : ViewModel() {
         _isLoggedIn.value = false
         callback()
     }
+
+    fun saveProfilePicture(imageUri: Uri, callback: (Boolean, String?) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
+
+        val storageRef = Firebase.storage.reference
+        val imageRef = storageRef.child("profile_images/$userId.jpg")
+
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener { _ ->
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val userData = hashMapOf(
+                        "profileImageUrl" to uri.toString()
+                    )
+
+                    val userDataJava = hashMapOf<String, Any>().apply {
+                        putAll(userData)
+                    }
+
+                    db.collection("users")
+                        .document(userId)
+                        .update(userDataJava)
+                        .addOnSuccessListener {
+                            callback(true, null)
+                        }
+                        .addOnFailureListener { e ->
+                            callback(false, e.message)
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                callback(false, e.message)
+            }
+    }
+
+
 }

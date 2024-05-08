@@ -107,8 +107,9 @@ fun AppNavigation(navController: NavHostController, viewModelContainer: ViewMode
                 val userCollection = UserCollection(name, category, description, iduser)
                 CollectionDetailScreen(navController, userCollection)
             }
-            composable(route = Screens.PhotoProfileScreen.name) {
-                PhotoProfileScreen()
+            composable(route = "${Screens.PhotoProfileScreen.name}/{userId}") { backStackEntry ->
+                val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                PhotoProfileScreen(navController, userId)
             }
             composable(route = Screens.ObjectCollection.name) {
                 ObjectCollection(navController)

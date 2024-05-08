@@ -15,13 +15,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.allcollections.navigation.Screens
 import com.example.allcollections.utils.rememberCameraLauncher
 import com.example.allcollections.utils.rememberPermission
+import com.example.allcollections.viewModel.ProfileViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun PhotoProfileScreen() {
+fun PhotoProfileScreen(navController: NavController, userId: String) {
+    val profileViewModel: ProfileViewModel = viewModel()
 
     val ctx = LocalContext.current
 
@@ -35,12 +41,25 @@ fun PhotoProfileScreen() {
         }
     }
 
-    fun takePicture() =
+    fun takePicture() {
         if (cameraPermission.status.isGranted) {
             cameraLauncher.captureImage()
         } else {
             cameraPermission.launchPermissionRequest()
         }
+    }
+
+    if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
+        profileViewModel.saveProfilePicture(cameraLauncher.capturedImageUri) { success, error ->
+            if (success) {
+                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                navController.navigate("${Screens.PhotoProfileScreen.name}/$userId")
+            } else {
+                Toast.makeText(ctx, "Errore durante il salvataggio dell'immagine: $error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
