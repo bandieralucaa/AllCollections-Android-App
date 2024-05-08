@@ -112,7 +112,7 @@ class ProfileViewModel : ViewModel() {
         val userId = auth.currentUser?.uid ?: return
 
         val storageRef = Firebase.storage.reference
-        val imageRef = storageRef.child("profile_images/$userId.jpg")
+        val imageRef = storageRef.child("$userId/profile_images/image.jpg")
 
         imageRef.putFile(imageUri)
             .addOnSuccessListener { _ ->
