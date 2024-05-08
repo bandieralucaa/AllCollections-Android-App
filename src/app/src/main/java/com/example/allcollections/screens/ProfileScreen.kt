@@ -1,5 +1,6 @@
 package com.example.allcollections.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
@@ -18,22 +20,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.allcollections.R
+import coil.compose.rememberImagePainter
 import com.example.allcollections.navigation.Screens
 import com.example.allcollections.viewModel.ProfileViewModel
+
+
 
 @Composable
 fun ProfileScreen(navController: NavController) {
@@ -42,9 +44,12 @@ fun ProfileScreen(navController: NavController) {
 
     var username by remember { mutableStateOf("") }
 
+    val profileImageUrl by remember { viewModel.profileImageUrl }
+
 
     LaunchedEffect(key1 = Unit) {
         username = viewModel.getUsername()
+        viewModel.getProfileImage()
     }
 
     Column(
@@ -71,11 +76,15 @@ fun ProfileScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.profile),
-            contentDescription = "Icona Person",
-            modifier = Modifier.size(64.dp)
-        )
+        profileImageUrl?.let { imageUrl ->
+            val painter = rememberImagePainter(imageUrl)
+            Image(
+                painter = painter,
+                contentDescription = "Immagine del profilo",
+                modifier = Modifier
+                    .size(120.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

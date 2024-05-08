@@ -49,17 +49,6 @@ fun PhotoProfileScreen(navController: NavController, userId: String) {
         }
     }
 
-    if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
-        profileViewModel.saveProfilePicture(cameraLauncher.capturedImageUri) { success, error ->
-            if (success) {
-                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                navController.navigate("${Screens.PhotoProfileScreen.name}/$userId")
-            } else {
-                Toast.makeText(ctx, "Errore durante il salvataggio dell'immagine: $error", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -80,7 +69,7 @@ fun PhotoProfileScreen(navController: NavController, userId: String) {
                     .data(cameraLauncher.capturedImageUri)
                     .crossfade(true)
                     .build(),
-                "Captured image"
+                "Captured imae"
             )
         }
 
@@ -90,4 +79,27 @@ fun PhotoProfileScreen(navController: NavController, userId: String) {
             Text(text = "Scegli dalla galleria")
         }
     }
+
+    /*if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
+        profileViewModel.saveProfilePicture(cameraLauncher.capturedImageUri) { success, error ->
+            if (success) {
+                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+                navController.navigate("${Screens.PhotoProfileScreen.name}/$userId")
+
+            } else {
+                Toast.makeText(ctx, "Errore durante il salvataggio dell'immagine: $error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }*/
+
+    if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
+        profileViewModel.saveProfilePicture(cameraLauncher.capturedImageUri) { success, error ->
+            if (success) {
+                navController.navigate(Screens.ProfileScreen.name)
+            } else {
+                Toast.makeText(ctx, "Errore durante il salvataggio dell'immagine: $error", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -55,6 +57,7 @@ fun RegisterScreen(navController: NavController) {
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             label = { Text(text = "Nome") }
         )
 
@@ -63,6 +66,7 @@ fun RegisterScreen(navController: NavController) {
         OutlinedTextField(
             value = surname,
             onValueChange = { surname = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             label = { Text(text = "Cognome") }
         )
 
@@ -71,6 +75,7 @@ fun RegisterScreen(navController: NavController) {
         OutlinedTextField(
             value = gender,
             onValueChange = { gender = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             label = { Text(text = "Sesso") }
         )
 
@@ -85,6 +90,7 @@ fun RegisterScreen(navController: NavController) {
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             label = { Text(text = "Indirizzo email") }
         )
 
@@ -93,6 +99,7 @@ fun RegisterScreen(navController: NavController) {
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             label = { Text(text = "Username") }
         )
 
@@ -102,6 +109,7 @@ fun RegisterScreen(navController: NavController) {
             value = password,
             onValueChange = { password = it },
             label = { Text(text = "Password") },
+            singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
 
