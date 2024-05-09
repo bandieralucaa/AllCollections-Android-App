@@ -1,7 +1,13 @@
 package com.example.allcollections.screens
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -75,22 +81,33 @@ fun PhotoProfileScreen(navController: NavController, userId: String) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Scegli dalla galleria")
-        }
-    }
-
-    /*if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
-        profileViewModel.saveProfilePicture(cameraLauncher.capturedImageUri) { success, error ->
-            if (success) {
-                val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-                navController.navigate("${Screens.PhotoProfileScreen.name}/$userId")
-
-            } else {
-                Toast.makeText(ctx, "Errore durante il salvataggio dell'immagine: $error", Toast.LENGTH_SHORT).show()
+        val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                val selectedImageUri: Uri? = data?.data
+                if (selectedImageUri != null) {
+                    profileViewModel.saveProfilePicture(selectedImageUri) { success, error ->
+                        if (success) {
+                            navController.navigate(Screens.ProfileScreen.name)
+                        } else {
+                            Toast.makeText(ctx, "Errore durante il salvataggio dell'immagine: $error", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
         }
-    }*/
+
+
+        Button(onClick = { galleryLauncher.launch(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)) }) {
+            Text(text = "Scegli dalla galleria")
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(onClick = { navController.navigate(Screens.ProfileScreen.name) }) {
+            Text(text = "Non ora")
+        }
+    }
 
     if (cameraLauncher.capturedImageUri.path?.isNotEmpty() == true) {
         profileViewModel.saveProfilePicture(cameraLauncher.capturedImageUri) { success, error ->
