@@ -1,5 +1,7 @@
 package com.example.allcollections.screens
 
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +10,16 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,7 +52,7 @@ fun RegisterScreen(navController: NavController) {
     var dateOfBirth by remember { mutableStateOf(LocalDate.now()) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("Maschio") }
     var username by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -72,12 +80,9 @@ fun RegisterScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        OutlinedTextField(
-            value = gender,
-            onValueChange = { gender = it },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-            label = { Text(text = "Sesso") }
-        )
+        GenderSelector(selectedGender = gender) { selectedGender ->
+            gender = selectedGender
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -183,3 +188,55 @@ private fun formatDate(date: LocalDate): String {
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
     return date.format(formatter)
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GenderSelector(
+    selectedGender: String,
+    onGenderSelected: (String) -> Unit
+) {
+    val genderOptions = listOf("Maschio", "Femmina", "Altro", "Non binario", "Preferisco non dichiarare")
+    var isExpanded by remember { mutableStateOf(false) }
+
+    var selectedText by remember {
+        mutableStateOf(genderOptions[0])
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = isExpanded,
+            onExpandedChange = { isExpanded = it }
+        ) {
+            TextField(
+                modifier = Modifier.menuAnchor(),
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) }
+            )
+
+            ExposedDropdownMenu(
+                expanded = isExpanded,
+                onDismissRequest = { isExpanded = false }
+            ) {
+                genderOptions.forEachIndexed { index, text ->
+                    DropdownMenuItem(
+                        text = { Text(text = text) },
+                        onClick = {
+                            selectedText = genderOptions[index]
+                            onGenderSelected(selectedText)
+                            isExpanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                    )
+                }
+            }
+        }
+    }
+}
+
