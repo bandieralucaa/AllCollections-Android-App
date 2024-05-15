@@ -23,7 +23,7 @@ fun SettingsScreen(navController: NavController, viewModel: ProfileViewModel) {
         "Cambia nome" to { /* TODO */ },
         "Cambia password" to { /* TODO */ },
         "Notifiche" to { /* TODO */ },
-        "Change Theme" to {
+        "Cambia tema" to {
             navController.navigate(Screens.ThemeScreen.name)
         },
         "Privacy" to { /* TODO */ },

@@ -25,7 +25,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import android.util.Log
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.text.input.ImeAction
 import com.example.allcollections.viewModel.ProfileViewModel
 
 @Composable
@@ -55,6 +57,7 @@ fun LoginScreen(navController: NavController, viewModel: ProfileViewModel) {
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             label = { Text(text = "Indirizzo email") }
         )
 
@@ -64,6 +67,7 @@ fun LoginScreen(navController: NavController, viewModel: ProfileViewModel) {
             value = password,
             onValueChange = { password = it },
             label = { Text(text = "Password") },
+            singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
 
