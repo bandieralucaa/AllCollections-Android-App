@@ -1,6 +1,6 @@
 package com.example.allcollections.apptheme
 
-enum class Theme {
+enum class ThemeMode {
     Light,
     Dark,
     System

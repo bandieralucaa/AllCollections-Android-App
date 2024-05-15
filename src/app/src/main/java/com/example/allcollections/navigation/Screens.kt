@@ -12,5 +12,6 @@ enum class Screens {
     MyCollections,
     CollectionDetailScreen,
     PhotoProfileScreen,
-    ObjectCollection
+    ObjectCollection,
+    ThemeScreen
 }

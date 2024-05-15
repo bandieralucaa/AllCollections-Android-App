@@ -1,6 +1,7 @@
 package com.example.allcollections.navigation
 
 import SearchScreen
+import android.content.res.Resources
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -17,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.allcollections.apptheme.ThemeMode
 import com.example.allcollections.collection.AddCollection
 import com.example.allcollections.collection.MyCollections
 import com.example.allcollections.collection.UserCollection
@@ -29,11 +31,19 @@ import com.example.allcollections.screens.PhotoProfileScreen
 import com.example.allcollections.screens.ProfileScreen
 import com.example.allcollections.screens.RegisterScreen
 import com.example.allcollections.screens.SettingsScreen
+import com.example.allcollections.screens.ThemeScreen
+import com.example.allcollections.viewModel.ThemeState
 import com.example.allcollections.viewModel.ViewModelContainer
 
 
 @Composable
-fun AppNavigation(navController: NavHostController, viewModelContainer: ViewModelContainer, startDestination: String) {
+fun AppNavigation(
+    navController: NavHostController,
+    viewModelContainer: ViewModelContainer,
+    startDestination: String,
+    state: ThemeState,
+    onThemeSelected: (ThemeMode) -> Unit
+) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -113,6 +123,9 @@ fun AppNavigation(navController: NavHostController, viewModelContainer: ViewMode
             }
             composable(route = Screens.ObjectCollection.name) {
                 ObjectCollection(navController)
+            }
+            composable(route = Screens.ThemeScreen.name) {
+                ThemeScreen(state, onThemeSelected, navController)
             }
         }
     }

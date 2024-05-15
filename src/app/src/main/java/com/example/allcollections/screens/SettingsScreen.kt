@@ -14,21 +14,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.allcollections.apptheme.ThemeToggleContent
-import com.example.allcollections.apptheme.ThemeViewModel
 import com.example.allcollections.navigation.Screens
 import com.example.allcollections.viewModel.ProfileViewModel
 
 @Composable
 fun SettingsScreen(navController: NavController, viewModel: ProfileViewModel) {
-
-
-
     val settingsItems = listOf<Pair<String, () -> Unit>>(
         "Cambia nome" to { /* TODO */ },
         "Cambia password" to { /* TODO */ },
         "Notifiche" to { /* TODO */ },
-        "Cambia tema" to {
+        "Change Theme" to {
+            navController.navigate(Screens.ThemeScreen.name)
         },
         "Privacy" to { /* TODO */ },
         "Logout" to {
