@@ -20,20 +20,17 @@ import com.example.allcollections.viewModel.ProfileViewModel
 @Composable
 fun SettingsScreen(navController: NavController, viewModel: ProfileViewModel) {
     val settingsItems = listOf<Pair<String, () -> Unit>>(
-        "Cambia nome" to { /* TODO */ },
-        "Cambia password" to { /* TODO */ },
-        "Notifiche" to { /* TODO */ },
+        "Modifica profilo" to {
+            navController.navigate(Screens.EditProfileScreen.name)
+        },
         "Cambia tema" to {
             navController.navigate(Screens.ThemeScreen.name)
         },
-        "Privacy" to { /* TODO */ },
         "Logout" to {
             viewModel.logout {
                 navController.navigate(Screens.LoginScreen.name)
             }
         }
-
-
     )
 
     Column(

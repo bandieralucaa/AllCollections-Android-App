@@ -61,7 +61,7 @@ fun PhotoProfileScreen(navController: NavController, userId: String) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(text = "Aggiungi la tua foto profilo", fontSize = 28.sp)
+        Text(text = "Scegli la tua foto profilo", fontSize = 28.sp)
 
         Spacer(modifier = Modifier.height(10.dp))
 
