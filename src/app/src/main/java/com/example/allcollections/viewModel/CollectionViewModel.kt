@@ -1,19 +1,32 @@
 package com.example.allcollections.viewModel
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.allcollections.collection.UserCollection
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.launch
 
 class CollectionViewModel : ViewModel() {
 
-    fun saveCollection(name: String, category: String, description: String, iduser: String?, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    private val db = Firebase.firestore
+    private val storage = Firebase.storage
+    private val auth = Firebase.auth
+
+    fun saveCollection(
+        name: String,
+        category: String,
+        description: String,
+        iduser: String?,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
         viewModelScope.launch {
             if (iduser != null) {
-                val db = Firebase.firestore
-
                 val collectionData = hashMapOf(
                     "name" to name,
                     "category" to category,
@@ -21,14 +34,12 @@ class CollectionViewModel : ViewModel() {
                     "iduser" to iduser
                 )
 
-                db.collection("collections")
-                    .add(collectionData)
-                    .addOnSuccessListener { documentReference ->
-                        onSuccess()
-                    }
-                    .addOnFailureListener { e ->
-                        onFailure("Errore durante il salvataggio della collezione: s${e.message}")
-                    }
+                try {
+                    val documentReference = db.collection("collections").add(collectionData).await()
+                    onSuccess(documentReference.id)
+                } catch (e: Exception) {
+                    onFailure("Errore durante il salvataggio della collezione: ${e.message}")
+                }
             } else {
                 onFailure("Utente non autenticato")
             }
@@ -38,24 +49,42 @@ class CollectionViewModel : ViewModel() {
     fun getCollections(iduser: String?, onSuccess: (List<UserCollection>) -> Unit, onFailure: (String) -> Unit) {
         viewModelScope.launch {
             if (iduser != null) {
-                val db = Firebase.firestore
-
-                db.collection("collections")
-                    .whereEqualTo("iduser", iduser)
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        val collections = documents.map { document ->
-                            document.toObject(UserCollection::class.java)
-                        }
-                        onSuccess(collections)
-                    }
-                    .addOnFailureListener { e ->
-                        onFailure("Errore durante il recupero delle collezioni: ${e.message}")
-                    }
+                try {
+                    val querySnapshot = db.collection("collections").whereEqualTo("iduser", iduser).get().await()
+                    val collections = querySnapshot.toObjects(UserCollection::class.java)
+                    onSuccess(collections)
+                } catch (e: Exception) {
+                    onFailure("Errore durante il recupero delle collezioni: ${e.message}")
+                }
             } else {
                 onFailure("Utente non autenticato")
             }
         }
     }
 
+    fun saveImageCollection(collectionId: String, imageUri: Uri, callback: (Boolean, String?) -> Unit) {
+        val userId = auth.currentUser?.uid ?: return
+
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("$userId/collections/$collectionId/image.jpg")
+
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    db.collection("collections")
+                        .document(collectionId)
+                        .update("collectionImageUrl", uri.toString())
+                        .addOnSuccessListener {
+                            callback(true, null)
+                        }
+                        .addOnFailureListener { e ->
+                            callback(false, e.message)
+                        }
+                }
+            }
+            .addOnFailureListener { e ->
+                callback(false, e.message)
+            }
+    }
 }
+

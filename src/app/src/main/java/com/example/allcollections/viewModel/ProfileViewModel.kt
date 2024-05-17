@@ -4,8 +4,6 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import com.example.allcollections.navigation.Screens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException

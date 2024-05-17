@@ -25,6 +25,7 @@ import com.example.allcollections.collection.UserCollection
 import com.example.allcollections.screens.ChatScreen
 import com.example.allcollections.collection.CollectionDetailScreen
 import com.example.allcollections.collection.ObjectCollection
+import com.example.allcollections.screens.AddImageCollection
 import com.example.allcollections.screens.EditProfileScreen
 import com.example.allcollections.screens.HomeScreen
 import com.example.allcollections.screens.LoginScreen
@@ -130,6 +131,10 @@ fun AppNavigation(
             }
             composable(route = Screens.EditProfileScreen.name) {
                 EditProfileScreen(navController)
+            }
+            composable(route = "${Screens.AddImageCollection.name}/{collectionId}") { backStackEntry ->
+                val collectionId = backStackEntry.arguments?.getString("collectionId") ?: ""
+                AddImageCollection(navController, collectionId)
             }
         }
     }

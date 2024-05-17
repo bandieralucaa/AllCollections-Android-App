@@ -14,5 +14,6 @@ enum class Screens {
     PhotoProfileScreen,
     ObjectCollection,
     ThemeScreen,
-    EditProfileScreen
+    EditProfileScreen,
+    AddImageCollection
 }
